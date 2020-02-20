@@ -1,0 +1,127 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>VUnit cosim &#8212; VUnit cosim  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="shortcut icon" href="_static/vunit_cosim.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Bridges" href="bridges/index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <p class="centered">
+<strong><a class="reference external" href="https://github.com/VUnit/vunit"><img alt="shieldVunit" src="https://img.shields.io/badge/VUnit/vunit-0c479d.svg?longCache=true&amp;style=flat-square&amp;logo=github" /></a> <a class="reference external" href="https://github.com/VUnit/cosim"><img alt="shieldCosim" src="https://img.shields.io/badge/VUnit/cosim-000000.svg?longCache=true&amp;style=flat-square&amp;logo=github&amp;logoColor=fdbe00" /></a> <a class="reference external" href="https://gitter.im/VUnit/vunit"><img alt="shieldGitter" src="https://img.shields.io/gitter/room/VUnit/vunit.svg?longCache=true&amp;style=flat-square&amp;logo=gitter&amp;logoColor=4db797&amp;color=4db797" /></a> <a class="reference external" href="https://www.twitter.com/VUnitFramework"><img alt="shieldTwitter" src="https://img.shields.io/twitter/follow/VUnitFramework.svg?longCache=true&amp;style=flat-square&amp;color=1DA1F2&amp;label=%40VUnitFramework&amp;logo=twitter&amp;logoColor=fff" /></a></strong></p><div class="section" id="vunit-cosim">
+<h1>VUnit cosim<a class="headerlink" href="#vunit-cosim" title="Permalink to this headline">¶</a></h1>
+<p><strong>VUnit</strong> is an open source unit testing framework for VHDL/SystemVerilog, which features the
+functionality needed to realise continuous and automated testing of HDL code.
+VUnit doesn’t replace but rather complements traditional testing methodologies by
+supporting a <em>“test early and often”</em> approach through automation. <a class="reference external" href="https://vunit.github.io/about.html#about" title="(in VUnit)"><span class="xref std std-ref">Read more</span></a></p>
+<p><strong>VUnit cosim</strong> follows the same philosophy to support co-simulation (co-execution) of VHDL along with
+software applications written in a different language (typically C/C++ or Python). The content of this module is organised in bridges, examples and utils:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="bridges/index.html#bridges"><span class="std std-ref">Bridges</span></a>: glue logic between a <a class="reference external" href="https://vunit.github.io/data_types/user_guide.html#data-types-library" title="(in VUnit)"><span class="xref std std-ref">external VHDL API</span></a> (or another bridge) and some other API in VHDL and/or C (bindings).</p></li>
+<li><p><a class="reference internal" href="examples/index.html#examples"><span class="std std-ref">Examples</span></a>: working demo projects that use some utils and/or bridges.</p></li>
+<li><p><a class="reference internal" href="utils.html#utils"><span class="std std-ref">Utils</span></a>: helper functions in Python (based on ctypes, base64, numpy and Pillow) which are useful for interacting with C-alike executables.</p></li>
+</ul>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="#">
+              <img class="logo" src="_static/VUnit_cosim_logo_420x420.png" alt="Logo"/>
+            </a></p>
+<h1 class="logo"><a href="#">VUnit cosim</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="bridges/index.html">Bridges</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">Utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="py-modindex.html">Python Module Index</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="bridges/index.html" title="next chapter">Bridges</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019-2020, author.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

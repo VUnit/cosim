@@ -1,0 +1,157 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Buffer &#8212; VUnit cosim  documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="shortcut icon" href="../_static/vunit_cosim.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Utils" href="../utils.html" />
+    <link rel="prev" title="Copy" href="copy.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="buffer">
+<span id="examples-buffer"></span><h1>Buffer<a class="headerlink" href="#buffer" title="Permalink to this headline">¶</a></h1>
+<p>This example shows how to use <a class="reference internal" href="../bridges/vhpidirect.html#cosim.vhpidirect.VHPIDIRECT" title="cosim.vhpidirect.VHPIDIRECT"><code class="xref py py-class docutils literal notranslate"><span class="pre">cosim.vhpidirect.VHPIDIRECT</span></code></a> (see <a class="reference internal" href="../bridges/vhpidirect.html#bridges-vhpidirect"><span class="std std-ref">VHPIDIRECT</span></a> to interact with VUnit’s internal <code class="docutils literal notranslate"><span class="pre">string_ptr</span></code>/<code class="docutils literal notranslate"><span class="pre">byte_vector_ptr</span></code> and/or <code class="docutils literal notranslate"><span class="pre">integer_vector_ptr</span></code>, from C and/or Python.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">run.py</span></code>: supports a custom CLI option, <code class="docutils literal notranslate"><span class="pre">--build</span></code>, that will set <code class="docutils literal notranslate"><span class="pre">VU.set_sim_option(&quot;ghdl.elab_e&quot;,</span> <span class="pre">True)</span></code>.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="../bridges/vhpidirect.html#cosim.vhpidirect.VHPIDIRECT.bridge" title="cosim.vhpidirect.VHPIDIRECT.bridge"><code class="xref py py-func docutils literal notranslate"><span class="pre">cosim.vhpidirect.VHPIDIRECT.bridge()</span></code></a> is used to enable external mode support for <code class="docutils literal notranslate"><span class="pre">string_ptr</span></code> and <cite>integer_vector_ptr</cite> (see <a class="reference external" href="https://vunit.github.io/data_types/user_guide.html#data-types-library" title="(in VUnit)"><span>Data Types</span></a>).</p></li>
+<li><p><a class="reference internal" href="../bridges/vhpidirect.html#cosim.vhpidirect.VHPIDIRECT.include" title="cosim.vhpidirect.VHPIDIRECT.include"><code class="xref py py-func docutils literal notranslate"><span class="pre">cosim.vhpidirect.VHPIDIRECT.include()</span></code></a> is used to build C sources with the provided C API/headers.</p></li>
+<li><p><a class="reference internal" href="../bridges/vhpidirect.html#cosim.vhpidirect.VHPIDIRECT.verscript" title="cosim.vhpidirect.VHPIDIRECT.verscript"><code class="xref py py-func docutils literal notranslate"><span class="pre">cosim.vhpidirect.VHPIDIRECT.verscript()</span></code></a> is used to provide a version script that matches the functions in the C API.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">post_func</span></code> provided by <a class="reference internal" href="../bridges/vhpidirect.html#bridges-vhpidirect"><span class="std std-ref">VHPIDIRECT</span></a> (see <a class="reference internal" href="../bridges/vhpidirect.html#cosim.vhpidirect.VHPIDIRECT.post_func" title="cosim.vhpidirect.VHPIDIRECT.post_func"><code class="xref py py-func docutils literal notranslate"><span class="pre">cosim.vhpidirect.VHPIDIRECT.post_func()</span></code></a>) is used to save in subdir <cite>vunit_out/cosim</cite> the CLI args that correspond to each testbench.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">corun.py</span></code>: allows to dynamically load and run any of the simulation binaries built with <code class="docutils literal notranslate"><span class="pre">run.py</span></code>. Given a testbench name, it finds the corresponding binary and arguments JSON file. Then, it is loaded dynamically and data buffers allocated in Python are shared with the simulation.</p></li>
+</ul>
+<p>Example session:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># python3 run.py --build -v</span>
+...
+
+<span class="c1"># ls vunit_out/cosim/</span>
+tb_external_byte_vector.json  tb_external_integer_vector.json  tb_external_string.json
+
+<span class="c1"># python3 corun.py tb_external_byte_vector</span>
+...
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>GHDL with mcode backend does NOT generate executable binaries. In order to use the two-step workflow, eithe LLVM or GCC backends need to be used.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">corun.py</span></code> depends on <a class="reference internal" href="../utils.html#module-cosim.utils" title="cosim.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cosim.utils</span></code></a>, which requires some additional dependencies. File <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> can be used to install all of them at once.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/VUnit_cosim_logo_420x420.png" alt="Logo"/>
+            </a></p>
+<h1 class="logo"><a href="../index.html">VUnit cosim</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../bridges/index.html">Bridges</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#vhpidirect">VHPIDIRECT</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="copy.html">Copy</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Buffer</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../utils.html">Utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../py-modindex.html">Python Module Index</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Examples</a><ul>
+      <li>Previous: <a href="copy.html" title="previous chapter">Copy</a></li>
+      <li>Next: <a href="../utils.html" title="next chapter">Utils</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019-2020, author.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/examples/buffer.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

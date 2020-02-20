@@ -1,0 +1,221 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Utils &#8212; VUnit cosim  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="shortcut icon" href="_static/vunit_cosim.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Index" href="genindex.html" />
+    <link rel="prev" title="Buffer" href="examples/buffer.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="utils">
+<span id="id1"></span><h1>Utils<a class="headerlink" href="#utils" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-cosim.utils"></span><p>C/Python co-simulation utilities</p>
+<dl class="function">
+<dt id="cosim.utils.b64enc_int_list">
+<code class="sig-prename descclassname">cosim.utils.</code><code class="sig-name descname">b64enc_int_list</code><span class="sig-paren">(</span><em class="sig-param">lst</em>, <em class="sig-param">width</em>, <em class="sig-param">height</em><span class="sig-paren">)</span><a class="headerlink" href="#cosim.utils.b64enc_int_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encode list of numbers as a base64 encoded PNG image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lst</strong> – list of pixel values (len = height x width) in row-major order</p></li>
+<li><p><strong>width</strong> – spatial width</p></li>
+<li><p><strong>height</strong> – spatial height</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="cosim.utils.b64enc_list_of_int_lists">
+<code class="sig-prename descclassname">cosim.utils.</code><code class="sig-name descname">b64enc_list_of_int_lists</code><span class="sig-paren">(</span><em class="sig-param">lst</em>, <em class="sig-param">width</em>, <em class="sig-param">height</em><span class="sig-paren">)</span><a class="headerlink" href="#cosim.utils.b64enc_list_of_int_lists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert list of lists of numbers to list of base64 encoded PNG images.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lst</strong> – list of lists of pixel values (len = height x width) in row-major order</p></li>
+<li><p><strong>width</strong> – spatial width</p></li>
+<li><p><strong>height</strong> – spatial height</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="cosim.utils.byte_buf">
+<code class="sig-prename descclassname">cosim.utils.</code><code class="sig-name descname">byte_buf</code><span class="sig-paren">(</span><em class="sig-param">lst</em><span class="sig-paren">)</span><a class="headerlink" href="#cosim.utils.byte_buf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert array to a string buffer (uint8_t* in C).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>lst</strong> – list of naturals range [0,255]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="cosim.utils.dlclose">
+<code class="sig-prename descclassname">cosim.utils.</code><code class="sig-name descname">dlclose</code><span class="sig-paren">(</span><em class="sig-param">obj</em><span class="sig-paren">)</span><a class="headerlink" href="#cosim.utils.dlclose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close/unload a PIE binary or a shared library.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>obj</strong> – object returned by ctypes.CDLL when the resource was loaded</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="cosim.utils.dlopen">
+<code class="sig-prename descclassname">cosim.utils.</code><code class="sig-name descname">dlopen</code><span class="sig-paren">(</span><em class="sig-param">path</em><span class="sig-paren">)</span><a class="headerlink" href="#cosim.utils.dlopen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open/load a PIE binary or a shared library.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cosim.utils.enc_args">
+<code class="sig-prename descclassname">cosim.utils.</code><code class="sig-name descname">enc_args</code><span class="sig-paren">(</span><em class="sig-param">args</em><span class="sig-paren">)</span><a class="headerlink" href="#cosim.utils.enc_args" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert args to a suitable format for a foreign C function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>args</strong> – list of strings</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="cosim.utils.int_buf">
+<code class="sig-prename descclassname">cosim.utils.</code><code class="sig-name descname">int_buf</code><span class="sig-paren">(</span><em class="sig-param">lst</em>, <em class="sig-param">bpw=4</em>, <em class="sig-param">signed=True</em><span class="sig-paren">)</span><a class="headerlink" href="#cosim.utils.int_buf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert array to a string buffer (uint8_t* in C).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lst</strong> – list of integers</p></li>
+<li><p><strong>bpw</strong> – number of bytes per word/integer</p></li>
+<li><p><strong>signed</strong> – whether to encode the numbers as signed</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="cosim.utils.read_byte_buf">
+<code class="sig-prename descclassname">cosim.utils.</code><code class="sig-name descname">read_byte_buf</code><span class="sig-paren">(</span><em class="sig-param">buf</em><span class="sig-paren">)</span><a class="headerlink" href="#cosim.utils.read_byte_buf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read byte/string buffer (uint8_t* in C) as a list of numbers.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cosim.utils.read_int_buf">
+<code class="sig-prename descclassname">cosim.utils.</code><code class="sig-name descname">read_int_buf</code><span class="sig-paren">(</span><em class="sig-param">buf</em>, <em class="sig-param">bpw=4</em>, <em class="sig-param">signed=True</em><span class="sig-paren">)</span><a class="headerlink" href="#cosim.utils.read_int_buf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read byte/string buffer as a list of numbers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>buf</strong> – byte/string buffer (uint8_t* in C) to read from</p></li>
+<li><p><strong>bpw</strong> – number of bytes per word/integer</p></li>
+<li><p><strong>signed</strong> – whether to decode the numbers as signed</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/VUnit_cosim_logo_420x420.png" alt="Logo"/>
+            </a></p>
+<h1 class="logo"><a href="index.html">VUnit cosim</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="bridges/index.html">Bridges</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/index.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="py-modindex.html">Python Module Index</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="examples/buffer.html" title="previous chapter">Buffer</a></li>
+      <li>Next: <a href="genindex.html" title="next chapter">Index</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019-2020, author.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/utils.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,234 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>VHPIDIRECT &#8212; VUnit cosim  documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="shortcut icon" href="../_static/vunit_cosim.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Examples" href="../examples/index.html" />
+    <link rel="prev" title="Bridges" href="index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="vhpidirect">
+<span id="bridges-vhpidirect"></span><h1>VHPIDIRECT<a class="headerlink" href="#vhpidirect" title="Permalink to this headline">¶</a></h1>
+<p>This is a bridge between VUnit’s external VHDL API and C, through GHDL’s VHPIDIRECT
+features (see <a class="reference external" href="https://ghdl.readthedocs.io/en/latest/using/Foreign.html#using-foreign" title="(in GHDL v0.37-dev)"><span>Interfacing to other languages</span></a>). A Python class (named <code class="docutils literal notranslate"><span class="pre">VHPIDIRECT</span></code>) provides
+helper functions to (re)use a C API (<code class="docutils literal notranslate"><span class="pre">vhpidirect_user.h</span></code>, <code class="docutils literal notranslate"><span class="pre">grt.ver</span></code> and/or
+<code class="docutils literal notranslate"><span class="pre">stubs.c</span></code>) with VUnit’s <code class="docutils literal notranslate"><span class="pre">add_builtins</span></code> and <code class="docutils literal notranslate"><span class="pre">set_sim_option(&quot;ghdl.elab_flags&quot;,</span> <span class="pre">...)</span></code>.
+Examples of how to use this bridge are shown in <a class="reference internal" href="../examples/index.html#examples-vhpidirect"><span class="std std-ref">VHPIDIRECT</span></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In the latest stable release of GHDL (v0.36), mcode backend does not support
+VHPIDIRECT. Moreover, using LLVM or GCC backends is suggested, as these generate
+executable files and are supported in a wider range of platforms.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For GHDL to generate PIE executable files, it needs to be configured with option
+<code class="docutils literal notranslate"><span class="pre">--default-pic</span></code>. Moreover, loading ELF binaries dynamically is a <em>hackish</em> procedure
+that takes advantage of PIE ELF binaries and shared libraries having a common structure
+on GNU/Linux. However, this does not work on Windows (see <a class="reference external" href="https://github.com/ghdl/ghdl/issues/803">ghdl/ghdl#803</a>).
+As a result:</p>
+<ul class="simple">
+<li><p>GHDL needs to be enhanced to allow building designs as shared libraries instead of
+executable binaries (see <a class="reference external" href="https://github.com/ghdl/ghdl/issues/800">ghdl/ghdl#800</a>).</p></li>
+<li><p>or, build features in VUnit need to be extended to use <code class="docutils literal notranslate"><span class="pre">ghdl</span> <span class="pre">--bind</span></code>,
+<code class="docutils literal notranslate"><span class="pre">ghdl</span> <span class="pre">--list-link</span></code> and gcc/clang in order to generate a <code class="docutils literal notranslate"><span class="pre">*.dll</span></code> on Windows.</p></li>
+<li><p>or, a helper method need to be added to this class to use gcc/clang.</p></li>
+</ul>
+</div>
+<div class="section" id="implementation-details">
+<h2>Implementation details<a class="headerlink" href="#implementation-details" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">vhpidirect_user.h</span></code> is the C implementation of the interface. It uses an array of
+pointers (<code class="docutils literal notranslate"><span class="pre">uint8_t</span> <span class="pre">*D[256];</span></code>) to keep a reference to all the buffers that are shared
+between C and VHDL.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Users that need to share more than 256 pointers, can and should include their
+own copy of this header file. Actually, in example <a class="reference internal" href="../examples/copy.html#examples-copy"><span class="std std-ref">Copy</span></a> the provided
+header file is not used. Instead, functions are implemented in <code class="docutils literal notranslate"><span class="pre">main.c</span></code>.</p>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">stubs.c</span></code> is to be used when multiple tests are handled in a single <code class="docutils literal notranslate"><span class="pre">run.py</span></code> file
+(i.e. by the same VUnit object), but some of them do NOT use external modes. Since
+builtins are compiled once only, every test (binary) needs to have placeholders for the C
+functions that VHDL expects to use. <code class="docutils literal notranslate"><span class="pre">stubs.c</span></code> provides <em>dummy</em> definitions of the C API.
+Note that these will produce errors if executed at runtime.</p>
+<p><code class="docutils literal notranslate"><span class="pre">grt.ver</span></code> is to be used when the ELF file built with GHDL is to be loaded dynamically.
+By default, GHDL hides most of the global symbols. Providing this file as an elaboration
+option ensures that the functions of the C API are visible. Script <code class="docutils literal notranslate"><span class="pre">corun.py</span></code> in example
+<a class="reference internal" href="../examples/buffer.html#examples-buffer"><span class="std std-ref">Buffer</span></a> shows how to dynamically load and execute the simulation from Python.</p>
+<div class="section" id="extfnc-mode">
+<h3>extfnc mode<a class="headerlink" href="#extfnc-mode" title="Permalink to this headline">¶</a></h3>
+<p>As explained in <a class="reference external" href="https://vunit.github.io/data_types/user_guide.html#data-types-library-external" title="(in VUnit)"><span>External VHDL API</span></a>, mode <em>extfnc</em> is expected to be
+used when data is not available in the same memory space as the VHDL simulation. For
+example, when libraries such as <a class="reference external" href="https://grpc.io/">gRPC</a>, <a class="reference external" href="https://zeromq.org/">ZeroMQ</a>
+or <a class="reference external" href="https://section5.ch/index.php/netpp/">netpp</a> are used to co-execute simulations in
+remote targets. Hence, <code class="docutils literal notranslate"><span class="pre">write_*/read_*</span></code> function bodies provided in <code class="docutils literal notranslate"><span class="pre">vhpidirect_user.h</span></code>
+are for testing purposes. In practice, developers willing to use this mode are expected
+to provide their own custom header file.</p>
+<p>Note that this is the difference between <em>extfnc</em> and <em>extacc</em>: with <em>extacc</em>, there is
+no explicit callback when VHDL modifies a value in a shared buffer. Conversely, with
+<em>extfnc</em>, VHDL cannot modify a value without a callback.</p>
+</div>
+</div>
+<div class="section" id="python-interface">
+<h2>Python interface<a class="headerlink" href="#python-interface" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cosim.vhpidirect.VHPIDIRECT">
+<em class="property">class </em><code class="sig-prename descclassname">cosim.vhpidirect.</code><code class="sig-name descname">VHPIDIRECT</code><a class="headerlink" href="#cosim.vhpidirect.VHPIDIRECT" title="Permalink to this definition">¶</a></dt>
+<dd><p>VHPIDIRECT VUnit co-simulation bridge class</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>srcs</strong> – optional alternative location of the sources</p>
+</dd>
+</dl>
+<dl class="method">
+<dt id="cosim.vhpidirect.VHPIDIRECT.bridge">
+<code class="sig-name descname">bridge</code><span class="sig-paren">(</span><em class="sig-param">features=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cosim.vhpidirect.VHPIDIRECT.bridge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get lists of files to register the bridge with <code class="docutils literal notranslate"><span class="pre">vu.add_builtins</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>features</strong> – struct,``{‘string’: &lt;VAL&gt;, ‘integer’: &lt;VAL&gt; }``, to provide
+bridges for the external VHDL API. Accepted values are
+<code class="docutils literal notranslate"><span class="pre">True</span></code>, <code class="docutils literal notranslate"><span class="pre">False</span></code>, <code class="docutils literal notranslate"><span class="pre">None</span></code> or <code class="docutils literal notranslate"><span class="pre">['path/to/custom/file']</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cosim.vhpidirect.VHPIDIRECT.include">
+<em class="property">property </em><code class="sig-name descname">include</code><a class="headerlink" href="#cosim.vhpidirect.VHPIDIRECT.include" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get path to include directories containing C sources/headers</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cosim.vhpidirect.VHPIDIRECT.post_func">
+<em class="property">static </em><code class="sig-name descname">post_func</code><span class="sig-paren">(</span><em class="sig-param">results</em><span class="sig-paren">)</span><a class="headerlink" href="#cosim.vhpidirect.VHPIDIRECT.post_func" title="Permalink to this definition">¶</a></dt>
+<dd><p>Optional post-func to copy runtime args for each test/executable to output subdir ‘cosim’</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cosim.vhpidirect.VHPIDIRECT.verscript">
+<code class="sig-name descname">verscript</code><span class="sig-paren">(</span><em class="sig-param">file=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cosim.vhpidirect.VHPIDIRECT.verscript" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get argument to add a custom version-script file to GHDL</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file</strong> – provide a custom file instead of the one provided with the bridge</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/VUnit_cosim_logo_420x420.png" alt="Logo"/>
+            </a></p>
+<h1 class="logo"><a href="../index.html">VUnit cosim</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Bridges</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">VHPIDIRECT</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#implementation-details">Implementation details</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#python-interface">Python interface</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utils.html">Utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../py-modindex.html">Python Module Index</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Bridges</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Bridges</a></li>
+      <li>Next: <a href="../examples/index.html" title="next chapter">Examples</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019-2020, author.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/bridges/vhpidirect.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
